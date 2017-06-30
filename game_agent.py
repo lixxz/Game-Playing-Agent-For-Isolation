@@ -35,7 +35,6 @@ def custom_score(game, player):
     float
         The heuristic value of the current game state to the specified player.
     """
-    #Distance between player and opponent
     if game.is_loser(player):
         return float("-inf")
 
@@ -69,7 +68,6 @@ def custom_score_2(game, player):
     float
         The heuristic value of the current game state to the specified player.
     """
-    # TODO: finish this function!
     if game.is_loser(player):
         return float("-inf")
 
@@ -238,7 +236,6 @@ class MinimaxPlayer(IsolationPlayer):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        # TODO: finish this function!
         score, minimax_best_move = self.maximizing_player(game, depth)
         return minimax_best_move
 
@@ -334,6 +331,7 @@ class AlphaBetaPlayer(IsolationPlayer):
 
         # Initialize the best move so that this function returns something
         # in case the search fails due to timeout
+        legal_moves = game.get_legal_moves()
         best_move = (-1, -1)
         depth = 0
 
@@ -345,7 +343,7 @@ class AlphaBetaPlayer(IsolationPlayer):
                 best_move = self.alphabeta(game, depth)
 
         except SearchTimeout:
-            return best_move  # Handle any actions required after timeout as needed
+            pass  # Handle any actions required after timeout as needed
 
         # Return the best move from the last completed search iteration
         return best_move
@@ -410,7 +408,7 @@ class AlphaBetaPlayer(IsolationPlayer):
         if depth<=0 or len(legal_moves)==0:
             return self.score(game, self), (-1, -1)
 
-        best_move = None
+        best_move = legal_moves[0]
         for move in legal_moves:
             score, leaf_move = self.min_player(game.forecast_move(move), depth-1, alpha, beta)
             if alpha < score:
@@ -432,7 +430,7 @@ class AlphaBetaPlayer(IsolationPlayer):
         if depth<=0 or len(legal_moves)==0:
             return self.score(game, self), (-1, -1)
 
-        best_move = None
+        best_move = legal_moves[0]
         for move in legal_moves:
             score, leaf_move = self.max_player(game.forecast_move(move), depth-1, alpha, beta)
             if score < beta:
